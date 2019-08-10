@@ -67,10 +67,13 @@
 
 ///////////////////////////////////////////////////////////////////
 // 
-struct device {
+typedef struct Device {
 public:
 	int  node;
-    int  cmd;
-    int  id;
+  int  id;
 	unsigned long payload;
+};
+
+typedef struct DevicePkt : Device {
+  int cmd;
 };

@@ -130,7 +130,7 @@ void uiUpdate(){
   digitalWrite(LED_BUILTIN, HIGH);  
 }
 
-bool rfSend(device dev){
+bool rfSend(DevicePkt dev){
 
 	//open write pipe
 	uint64_t writeAddress;
@@ -160,7 +160,7 @@ bool rfSend(device dev){
   Serial.println(result?" ok":" error");
 }
 
-unsigned long rfEncode(device dev){
+unsigned long rfEncode(DevicePkt dev){
 	unsigned long retVal = 0xD;
 	retVal = (retVal << 4) + dev.cmd;
 	retVal = (retVal << 8) + dev.id;
@@ -267,7 +267,7 @@ void handleSend(String msg, int clientId){
     Serial.println("error parsing message");
     return;
   }
-  device dev;
+  DevicePkt dev;
   dev.node = jdev["node"];
   dev.id = jdev["id"];
   dev.cmd = jdev["cmd"];
