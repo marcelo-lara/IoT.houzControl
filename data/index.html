@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>HouzControl 0.2</title>
+    <link rel="stylesheet" type="text/css" href="index.css">
+
+</head>
+
+<body>
+    <div class="status">
+        <div id="st" dev="0"></div>
+        <div id="tx"></div>
+        <div id="rx"></div>
+    </div>
+
+    <div class="node">
+        <h2>
+            Suite
+            <span class="query" dev="9"></span>
+        </h2>
+        <div class="devices">
+            <div class="row">
+                <!--light-->
+                <div class="btn light b1 x1" dev="33">
+                    light
+                </div>
+
+                <!--enviroment-->
+                <div class="weather" dev="37">
+                    <div class="btn temp" dev="38">-</div>
+                    <div class="btn hum" dev="39">-</div>
+                    <div class="btn press" dev="40">-</div>
+                </div>
+
+            </div>
+            <div class="row">
+                <!--fan-->
+                <div class="fan row" dev="34">
+                    <div class="btn b1 on">off</div>
+                    <div class="btn">1</div>
+                    <div class="btn">2</div>
+                    <div class="btn">3</div>
+                    <div class="btn">4</div>
+                </div>
+            </div>
+            <!-- <div class="row"> -->
+                <!--ac-->
+                <!-- <div class="ac row" dev="35">
+                    <div class="btn b1">AC</div>
+                    <div class="btn">temp</div>
+                </div>
+            </div> -->
+        </div>
+    </div>
+    <div class="node">
+        <h2>
+            Living
+            <span class="query" dev="3"></span>
+        </h2>
+        <div class="row">
+
+            <!--2x mainlight-->
+            <div class="light x2 col" dev="51">
+                <div class="btn b2">m1</div>
+                <div class="btn b2">m2</div>
+            </div>
+
+            <!--8x dicroArray-->
+            <div class="light x8 dicroRow" dev="52">
+                <div class="row">
+                    <div class="btn b2" b="0">d1</div>
+                    <div class="btn b2" b="1">d2</div>
+                    <div class="btn b2" b="2">d3</div>
+                    <div class="btn b2" b="3">d4</div>
+                </div>
+                <div class="row">
+                    <div class="btn b2" b="7">d8</div>
+                    <div class="btn b2" b="6">d7</div>
+                    <div class="btn b2" b="5">d6</div>
+                    <div class="btn b2" b="4">d5</div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <!--4x spotlight-->
+            <div class="light x4 row" dev="53">
+                <div class="btn b4" b="0">s1</div>
+                <div class="btn b4" b="1">s2</div>
+                <div class="btn b4" b="2">s3</div>
+                <div class="btn b4" b="3">s4</div>
+            </div>
+            <!--2x fxlight-->
+            <div class="light x2 row" dev="54" style="flex: 0 0 auto">
+                <div class="btn b4">fx1</div>
+                <div class="btn b4">fx2</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="fxanim row" dev="55">
+                <div class="btn" val="0x00">clr</div>
+                <div class="btn" val="0x01">dicro On</div>
+                <div class="btn" val="0x02">dicro Off</div>
+                <div class="btn" val="0x10">dungeon On</div>
+                <div class="btn" val="0x1F">dungeon Off</div>
+            </div>
+        </div>
+
+    </div>
+
+    </div>
+    <div class="node">
+        <h2>
+            Office
+            <span class="query" dev="1"></span>
+        </h2>
+        <div class="devices">
+            <div class="row">
+                <!--light-->
+                <div class="light btn b1 x1" dev="19">
+                    light
+                </div>
+
+                <!--enviroment-->
+                <div class="weather" dev="31">
+                    <div class="temp btn" dev="26">-</div>
+                    <div class="hum btn" dev="27">-</div>
+                    <div class="press btn" dev="28">-</div>
+                </div>
+
+            </div>
+            <!-- <div class="row"> -->
+                <!--ac-->
+                <!-- <div class="ac row" dev="11">
+                    <div class="btn b1">AC</div>
+                    <div class="btn">temp</div>
+                </div>
+            </div> -->
+        </div>
+    </div>
+    <div>
+        <h2>scenes</h2>
+        <div class="scene row">
+            <div class="btn hello" val="0xCF2">hello</div>
+            <div class="btn sleep" val="0xCF1">sleep</div>
+            <div class="btn goodbye" val="0xCF0">goodbye</div>
+        </div>
+
+    </div>
+
+    <!--app-->
+    <!-- <script src="/socket.io/socket.io.js"></script> -->
+    <script src="/src/data.js"></script>
+    <script src="/src/bind.js"></script>
+    <script src="/src/render.js"></script>
+    <script src="/src/main.js"></script>
+    <script src="/src/sockets.js"></script>
+</body>
+
+</html>

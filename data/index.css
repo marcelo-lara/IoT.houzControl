@@ -1,0 +1,64 @@
+body {background-color: #000; box-sizing: border-box; margin:0; padding: 0; transition: all .1s;font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif}
+
+/*// general //////////////////////////////////////////////////////////////////////////// */
+div.row{display: flex; flex-direction: row;}
+div.row>div{flex:1;}
+h2 {margin:0; padding: 5pt;color: #ccc;}
+div.col{display: flex;flex-direction: column;}
+div.col>div{flex:1;}
+
+/* server status */
+div.status{width: 30pt; height: 10pt; display: flex; flex-direction: row; position: fixed; top: 0; right: 0; background-color: #000000a6;}
+div.status>div{flex: auto;background-color: #444;margin: 2pt;width: 10pt;}
+.err {background-color: #F00 !important;}
+.online {background-color: #060 !important;}
+.offline {background-color: #600 !important;}
+.ack {background-color: #0F0 !important}
+.rfRetry  {background-color: #FF0 !important}
+.rfOk  {background-color: #0F0 !important}
+.rfFail  {background-color: #F00 !important}
+.warn {background-color: #bda530 !important}
+
+/*// devices //////////////////////////////////////////////////////////////////////////// */
+.btn {padding: 5pt; margin:1pt; background-color: #666;color: #000; cursor: pointer;} 
+.btn.on {background-color: green;color: #fff}
+
+.b1 {flex: 0 0 100pt !important;width: 100pt;height: 100pt;}
+.b2 {flex: 0 0 50pt !important;width: 50pt;height: 50pt;}
+.b4 {flex: 0 0 25pt !important;width: 25pt;height: 25pt;}
+
+
+/*div.node span.query::before {font-size: 10pt; float: right; content: '\f021'; font-family: 'Font Awesome 5 Free'}*/
+div.node span.query::before {font-size: 10pt; float: right; content: 'R'; cursor: pointer; padding: 3pt;}
+
+/* dicro row */
+div.dicroRow {display: flex; flex-direction: column;}
+div.dicroRow>div {flex:1;background-color: #000;}
+
+/* fan */
+div.fan>div:first-child {color:#fff;}
+div.fan>div:first-child.on{background-color: #666; color:#000;}
+
+/* wheather */
+div.weather {flex: 1 1 auto; display: grid; grid-template-columns: auto auto; grid-template-rows: auto auto; grid-template-areas: "temp temp hum" "temp temp press"}
+div.weather .temp {grid-area: temp;font-size: 2em;/* text-align: center; *//* vertical-align: middle; */}
+div.weather .temp:after {content: "º"}
+div.weather .hum {grid-area: hum;}
+div.weather .hum:after {content: "%"}
+div.weather .press {grid-area: press;}
+div.weather .press:after {content: "hPa"}
+
+/* fxanim/scene */
+div.fxanim {flex-wrap: wrap;}
+div.fxanim .btn,
+div.scene .btn{background-color: #306;color: #bbb;padding:5pt; flex: 1 1 20pt;min-height: 40pt;min-width: 40pt;}
+
+div {
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome and Opera */
+  }
