@@ -64,16 +64,21 @@
 #define rf_wemos_tx		0xA4
 #define rf_wemos_rx		0xB4
 
+#define deviceType_generic  0
+#define deviceType_float    1
+#define deviceType_pressure 2
 
 ///////////////////////////////////////////////////////////////////
 // 
 typedef struct Device {
 public:
-	int  node;
-  int  id;
+	u8 node;
+  u8 id;
 	unsigned long payload;
+  u8 type; //deviceType defines
 };
 
 typedef struct DevicePkt : Device {
-  int cmd;
+  u8 cmd;
 };
+
