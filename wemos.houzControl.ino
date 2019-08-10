@@ -34,6 +34,9 @@ AsyncWebSocket ws("/");
 #include "src/HouzDevicesCodec/HouzDevicesCodec.h"
 HouzDevicesCodec codec;
 
+#include "src/HouzCore/HouzCore.h"
+HouzCore houzCore;
+
 typedef struct devData {
 public:
   int id;
@@ -113,7 +116,12 @@ void rfUpdate(){
 	deviceData device = codec.decode(_radioPayLoad, _radioNode);
   Serial.print("RFrec>\tid: ");
   Serial.println(device.id);
-  handleRecevice(device);
+
+  Device dev;
+  dev.id=device.id;
+  dev.payload=device.payload;
+
+  handleRecevice(dev);
 
 }
 
@@ -212,7 +220,7 @@ void onWsEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventTyp
 
   switch (type) {
     case WS_EVT_CONNECT:
-      handleConnect(client->id());
+      ws.text(client->id(), houzCore.json_getDeviceList());
       break;
 
     case WS_EVT_DISCONNECT:
@@ -238,28 +246,6 @@ void onNotFound(AsyncWebServerRequest *request){
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // HouzServer
-
-
-
-String devDataToJson(devData dev){
-    String msg;
-    msg += "{\"id\":";
-    msg += dev.id;
-
-    if(dev.id==external_temp||dev.id==suite_temp||dev.id==suite_humidity||dev.id==external_humidity){
-      char buffer[10];
-      msg += ",\"fVal\":";
-      msg += dtostrf(((float)dev.data/100), -5, 2, buffer);
-    //TODO:handle pressure
-    }else{
-      msg += ",\"iVal\":";
-      msg += dev.data;
-    };
-
-    msg += "}";
-    return msg;
-};
-
 void handleSend(String msg, int clientId){
   DynamicJsonDocument jdev(1024);
   DeserializationError error = deserializeJson(jdev, msg);
@@ -277,75 +263,15 @@ void handleSend(String msg, int clientId){
   rfSend(dev);
 };
 
-void handleRecevice(deviceData dev){
-
-  updateDevice(dev);
+void handleRecevice(Device dev){
+  houzCore.updateDevice(dev);
 
   //build json
   String msg = "{\"act\":4,\"dev\":";
-  devData d;
-  d.id = dev.id;
-  d.data = dev.payload;
-  msg += devDataToJson(d);
+  msg += houzCore.json_getDevice(dev);
   msg += "}";
 
   //broadcast
   ws.textAll(msg);
-
 }
 
-
-int nodes[] = {living_node, office_node, suite_node};
-devData devices[] = {
-//living 
-  {0x33,3,0,0}, //mainLight	
-  {0x34,3,0,0}, //dicroLight	
-  {0x35,3,0,0}, //spotLight	
-  {0x36,3,0,0}, //fxLight		
-//suite
-  {0x21,2,0,0}, //light		    
-  {0x22,2,0,0}, //fan			    
-  {0x23,2,0,0}, //AC			    
-  {0x25,2,0,0}, //enviroment	
-  {0x26,2,0,0}, //temp			  
-  {0x27,2,0,0}, //humidity  	
-  {0x28,2,0,0}, //pressure	
-//office	
-  {0x11,1,0,0}, //AC			    
-  {0x12,1,0,0}, //AC_temp		
-  {0x13,1,0,0}, //light		  
-  {0x17,1,0,0}, //light		
-  {0x1A,1,0,0}, //temp		  
-  {0x1B,1,0,0}, //humidity	
-  {0x1C,1,0,0}, //pressure	
-  {0x1F,1,0,0} //weather	
-};
-
-// device status
-void updateDevice(deviceData dev){
-  for (int i = 0; i < 20; i++)
-  {
-    if(devices[i].id==dev.id){
-      devices[i].data=dev.payload;
-      return;
-    }
-  }
-  Serial.println("NOT FOUND!!!!");
-}
-
-// update client
-void handleConnect(int clientId){
-  Serial.print(clientId);
-  Serial.println(" connected..");
-  
-  int devCount = sizeof(devices) / sizeof(devData);
-  String msg = "{\"act\":17,\"dev\":[";
-  for (int i = 0; i < devCount; i++)
-  {
-    msg += devDataToJson(devices[i]);
-    msg += ",";
-  }
-  msg = msg.substring(0,msg.length()-1);
-  msg += "]}";
-  ws.text(clientId, msg);
-};
