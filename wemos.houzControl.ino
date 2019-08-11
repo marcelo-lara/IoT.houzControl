@@ -37,14 +37,6 @@ HouzDevicesCodec codec;
 #include "src/HouzCore/HouzCore.h"
 HouzCore houzCore;
 
-typedef struct devData {
-public:
-  int id;
-  int node;
-  unsigned long data;
-  unsigned long update;
-};
-
 void setup(){
   Serial.begin(115200);
   Serial.println("\n\n::: WeMos Houz Server :::");
