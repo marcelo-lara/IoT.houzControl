@@ -72,7 +72,7 @@ void rfConnect(){
     radio.enableDynamicAck();
     radio.setCRCLength(RF24_CRC_8);
     radio.setChannel(rfChannel);
-    radio.setRetries(20, 10);  
+    radio.setRetries(10, 5);  
 
     //pipes setup | server node
     radio.openWritingPipe(rf_server_tx);
@@ -83,7 +83,12 @@ void rfConnect(){
 
     //debug
     radioReady = (rfChannel == radio.getChannel()); //test if radio is enabled
-    radio.printDetails();
+    if(!radioReady){
+      Serial.println("RF ERROR <<<<<<<<<");
+      radio.printDetails();
+    }else{
+      Serial.println("radio\tonline");
+    }
 }
 
 void rfUpdate(){
@@ -173,8 +178,8 @@ void uiUpdate(){
 // FileSystem
 void fsInit(){
   if(SPIFFS.begin()){
-    Serial.println("SPIFFS loaded");
     server.serveStatic("/", SPIFFS, "/index.html");
+    Serial.println("SPIFFS\tloaded");
   }else{
     Serial.println("An Error has occurred while mounting SPIFFS");
   }

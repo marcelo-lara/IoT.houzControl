@@ -5,6 +5,8 @@
 #include <ESP8266mDNS.h>
 
 void wemos_WiFi::connect() {
+  Serial.print("connecting");
+
   pinMode(LED_BUILTIN, OUTPUT);
   WiFi.mode(WIFI_STA);
   WiFi.begin(STASSID, STAPSK);
@@ -15,8 +17,9 @@ void wemos_WiFi::connect() {
     digitalWrite(LED_BUILTIN, LOW);
     delay(100);
     digitalWrite(LED_BUILTIN, HIGH);
+    Serial.print(".");
   }
-  Serial.print("connected to ");
+  Serial.print("\rconnected to ");
   Serial.print(STASSID);
   Serial.print(" @");
   Serial.println(WiFi.localIP());
