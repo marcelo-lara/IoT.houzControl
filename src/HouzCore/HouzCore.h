@@ -6,15 +6,18 @@
 class HouzCore{
   public:
     HouzCore();
-    Device* getDevices();
+    void timer();
+
     void updateDevice(Device dev);
+    Device getDevice(u8 deviceId);
 
     //json
     String json_getDeviceList();
     String json_getDevice(u8 deviceId);
-    String json_getDevice(Device dev);
 
   private:
-    void mem_write();
-    void mem_read();
+    String json_getDevice(Device dev);
+    void persist(Device dev, int devIndex);
+    void readDevices();
+    void persistReset();
 };

@@ -68,8 +68,7 @@
 #define deviceType_float    1
 #define deviceType_pressure 2
 
-///////////////////////////////////////////////////////////////////
-// 
+// Device data
 typedef struct Device {
 public:
   u8 id;

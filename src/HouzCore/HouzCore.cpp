@@ -40,34 +40,64 @@ Device devices[]={
 
 HouzCore::HouzCore(){
     Serial.println("-HouzCore init-");
-    mem_read();
-
     __devices_count = sizeof(devices) / sizeof(Device);
-    EEPROM.write(0, __devices_count);
+    EEPROM.begin(512);
+    readDevices();
 }
 
-void HouzCore::mem_write(){};
-void HouzCore::mem_read(){
-    int aa;
-    EEPROM.get(0, aa);
-    Serial.println(aa);
+void HouzCore::timer(){
+  
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+// EEPROM persistence
+void HouzCore::persist(Device dev, int devIndex){
+  int addr = devIndex*sizeof(Device);
+  EEPROM.put(addr, dev);
+  EEPROM.commit();
+};
+void HouzCore::readDevices(){
+  //retrieve eeprom values
+  for (int i = 0; i < __devices_count; i++)
+  {
+    Device _mem;
+    int addr = i*sizeof(Device);
+    bool commitNeeded = false;
+    EEPROM.get(addr,_mem);
+    if(_mem.id==devices[i].id){
+      devices[i].payload=_mem.payload;
+    }else{
+      EEPROM.put(addr, devices[i]);
+      commitNeeded = true;
+    }
+    if(commitNeeded) EEPROM.commit();
+  }
 };
 
-
-Device* HouzCore::getDevices(){
-    return devices;
-}
+Device HouzCore::getDevice(u8 deviceId){
+  for (int i = 0; i < __devices_count; i++)
+  {
+    if(devices[i].id==deviceId){
+      return devices[i];
+    }
+  }
+  return {-1,0,0,0};
+};
 
 void HouzCore::updateDevice(Device dev){
   for (int i = 0; i < __devices_count; i++)
   {
     if(devices[i].id==dev.id){
       devices[i].payload=dev.payload;
+      persist(dev, i);
       return;
     }
   }
 }
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+// JSON responses
 String HouzCore::json_getDeviceList(){
   String msg = "{\"act\":17,\"dev\":[";
   for (int i = 0; i < __devices_count; i++)
@@ -81,15 +111,17 @@ String HouzCore::json_getDeviceList(){
 };
 
 String HouzCore::json_getDevice(u8 deviceId){
-  return "";
+  Device dev = getDevice(deviceId);
+  if(dev.id==-1) return "";
+  return json_getDevice(dev);
 };
 
 String HouzCore::json_getDevice(Device dev){
     String msg;
     msg += "{\"id\":";
     msg += dev.id;
-
-
+    msg += ",\"type\":";
+    msg += dev.type;
     if(dev.type==deviceType_float){
       char buffer[10];
       msg += ",\"fVal\":";
@@ -102,7 +134,6 @@ String HouzCore::json_getDevice(Device dev){
       msg += ",\"iVal\":";
       msg += dev.payload;
     };
-
     msg += "}";
     return msg;
 };

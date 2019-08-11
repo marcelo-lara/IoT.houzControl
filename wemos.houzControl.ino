@@ -65,6 +65,7 @@ void loop(){
   wemosWiFi.update();
   rfUpdate();
   uiUpdate();
+  houzCore.timer();
 };
 
 
@@ -114,8 +115,6 @@ void rfUpdate(){
 
 	//decode payload
 	deviceData device = codec.decode(_radioPayLoad, _radioNode);
-  Serial.print("RFrec>\tid: ");
-  Serial.println(device.id);
 
   Device dev;
   dev.id=device.id;
@@ -125,21 +124,7 @@ void rfUpdate(){
 
 }
 
-bool _ui_onNotification = false;
-unsigned long _ui_onNotification_end;
-void uiNotify(){
-  _ui_onNotification=true;
-  _ui_onNotification_end=millis()+100;
-  digitalWrite(LED_BUILTIN, LOW);  
-}
-void uiUpdate(){
-  if(!_ui_onNotification) return;
-  if(millis()<_ui_onNotification_end) return;
-  digitalWrite(LED_BUILTIN, HIGH);  
-}
-
 bool rfSend(DevicePkt dev){
-
 	//open write pipe
 	uint64_t writeAddress;
   switch (dev.node) {
@@ -175,6 +160,22 @@ unsigned long rfEncode(DevicePkt dev){
 	retVal = (retVal << 16) + dev.payload;
 	return retVal;
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// UI Notification
+bool _ui_onNotification = false;
+unsigned long _ui_onNotification_end;
+void uiNotify(){
+  _ui_onNotification=true;
+  _ui_onNotification_end=millis()+100;
+  digitalWrite(LED_BUILTIN, LOW);  
+}
+void uiUpdate(){
+  if(!_ui_onNotification) return;
+  if(millis()<_ui_onNotification_end) return;
+  digitalWrite(LED_BUILTIN, HIGH);  
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // FileSystem
@@ -268,7 +269,7 @@ void handleRecevice(Device dev){
 
   //build json
   String msg = "{\"act\":4,\"dev\":";
-  msg += houzCore.json_getDevice(dev);
+  msg += houzCore.json_getDevice(dev.id);
   msg += "}";
 
   //broadcast
