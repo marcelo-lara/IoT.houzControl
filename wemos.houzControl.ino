@@ -49,8 +49,7 @@ void setup(){
 
 //rf setup
   rfConnect();
-    //TODO:retrieve current values from nodes
-
+  updateTimerInit();
 };
 
 void loop(){
@@ -58,6 +57,77 @@ void loop(){
   rfUpdate();
   uiUpdate();
   houzCore.timer();
+  updateTimer();
+};
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// updateTimer
+#define nodeUpdate_pending 0
+#define nodeUpdate_waiting 1
+#define nodeUpdate_ok      2
+#define nodeUpdate_idle    3
+
+struct NodeUpdate{
+  u8 nodeId;
+  unsigned long timeout;
+  u8 status;
+  int currNode;
+};
+int nodeList[] = {living_node, office_node, suite_node};
+int nodeListLenght = 2;
+NodeUpdate nodeUpdate;
+void updateTimerInit(){
+  
+  nodeUpdate.nodeId = nodeList[0];
+  nodeUpdate.currNode = 0;
+  nodeUpdate.status = nodeUpdate_pending;
+};
+void updateTimer(){
+  switch (nodeUpdate.status)
+  {
+  case nodeUpdate_idle:
+  case nodeUpdate_pending:
+    if(millis()<nodeUpdate.timeout) return;
+    return upateTimer_call();
+    break;
+
+  case nodeUpdate_ok:
+  case nodeUpdate_waiting:
+    if(millis()<nodeUpdate.timeout) return;
+    //TODO: store node status
+    upateTimer_next();
+    break;
+  
+  default:
+    break;
+  }
+};
+
+void upateTimer_next(){
+  //seek next node
+  nodeUpdate.currNode++;
+  if(nodeUpdate.currNode>nodeListLenght){
+    nodeUpdate.status=nodeUpdate_idle;
+    nodeUpdate.currNode=0;
+    nodeUpdate.timeout=millis()+300000; //5m: (5*60*1000));
+  }else{
+    nodeUpdate.status=nodeUpdate_pending;
+    nodeUpdate.timeout=millis()+2000;  //2s: (2*1000));
+  }
+  nodeUpdate.nodeId = nodeList[nodeUpdate.currNode];
+}
+
+void upateTimer_call(){
+    nodeUpdate.status=nodeUpdate_waiting;
+    nodeUpdate.timeout=millis()+1000;
+    DevicePkt pkt;
+    pkt.id=nodeUpdate.nodeId;
+    pkt.node=nodeUpdate.nodeId;
+    pkt.payload=0;
+    pkt.cmd=10;
+    if(rfSend(pkt)){
+      nodeUpdate.status=nodeUpdate_ok;
+    };
 };
 
 
@@ -109,6 +179,10 @@ void rfUpdate(){
 
   //notify ui
   uiNotify();
+  Serial.print("RFin| n");
+  Serial.print(_radioNode, HEX);
+  Serial.print(">");
+  Serial.println(_radioPayLoad, HEX);
 
 	//decode payload
 	deviceData device = codec.decode(_radioPayLoad, _radioNode);

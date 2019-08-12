@@ -36,6 +36,14 @@ const deviceHandler = {
   }
 };
 
+/////////////////////////////////////////////////////////////////////////////////////////////
+// application status
+// . ws disconnected
+// . ws connecting
+// . ws connected
+// . rf offline
+// . rf online
+
 const status = {
   rx: undefined,
   tx: undefined,
