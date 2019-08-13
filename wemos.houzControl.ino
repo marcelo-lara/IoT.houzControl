@@ -37,6 +37,9 @@ HouzDevicesCodec codec;
 #include "src/HouzCore/HouzCore.h"
 HouzCore houzCore;
 
+#include "src/HouzRfLink/HouzRfLink.h"
+HouzRfLink houzLink;
+
 void setup(){
   Serial.begin(115200);
   Serial.println("\n\n::: WeMos Houz Server :::");
@@ -48,6 +51,7 @@ void setup(){
   webInit();
 
 //rf setup
+  houzLink.init();
   rfConnect();
   updateTimerInit();
 };
@@ -58,6 +62,9 @@ void loop(){
   uiUpdate();
   houzCore.timer();
   updateTimer();
+  if(houzLink.hasData()){
+
+  };
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
