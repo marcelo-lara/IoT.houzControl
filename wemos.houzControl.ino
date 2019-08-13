@@ -116,7 +116,7 @@ void upateTimer_next(){
   if(nodeUpdate.currNode>nodeListLenght){
     nodeUpdate.status=nodeUpdate_idle;
     nodeUpdate.currNode=0;
-    nodeUpdate.timeout=millis()+300000; //5m: (5*60*1000));
+    nodeUpdate.timeout=millis()+600000; //10m: (5*60*1000));
   }else{
     nodeUpdate.status=nodeUpdate_pending;
     nodeUpdate.timeout=millis()+2000;  //2s: (2*1000));
@@ -132,7 +132,7 @@ void upateTimer_call(){
     pkt.node=nodeUpdate.nodeId;
     pkt.payload=0;
     pkt.cmd=10;
-    if(rfSend(pkt)){
+    if(linkSend(pkt)){
       nodeUpdate.status=nodeUpdate_ok;
     };
 };
@@ -202,7 +202,7 @@ void rfUpdate(){
 
 }
 
-bool rfSend(DevicePkt dev){
+bool linkSend(DevicePkt dev){
 	//open write pipe
 	uint64_t writeAddress;
   switch (dev.node) {
@@ -339,7 +339,7 @@ void handleSend(String msg, int clientId){
   dev.payload = jdev["payload"];
 
   //deliver packet
-  rfSend(dev);
+  linkSend(dev);
 };
 
 void handleRecevice(Device dev){
