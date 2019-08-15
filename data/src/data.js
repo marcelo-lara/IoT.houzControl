@@ -12,11 +12,14 @@ const typeEnm= {
   array4x: 9,
   array8x: 10,
   envlight: 11,
-  fxanim: 12
+  fxanim: 12,
+  rfLink: 14
 };
 
 let devices=[
-    {id: 0x00, name: 'server_node', type: typeEnm.node, fVal: 0, iVal: 0, node:0, status: -1},
+    // Server
+    {id: 0x00, name: 'server_node', type: typeEnm.node},
+    {id: 0x01, name: 'server_rf', type: typeEnm.rfLink},
 
     // Office
     {name: 'office_node',       id:  0x1, type: typeEnm.node, node: 1}, //N1DC04F0F0
