@@ -1,7 +1,6 @@
 const deviceHandler = {
   bind: (_upd)=>{
     if(!_upd || !_upd.dev) return;
-    console.log("binderr");
 
     //update device values
     for (const val of _upd.dev) {
@@ -23,7 +22,7 @@ const deviceHandler = {
     status.render(_upd.act);
 
     //check if device exists
-    if(!_upd.dev) return;
+    if(!_upd.dev || _upd.dev.id==0) return;
     let dev=devices.find(x=>x.id==_upd.dev.id);
     if(!dev) return;
     
@@ -59,15 +58,26 @@ const status = {
     setTimeout(()=>{elem.className='';},timeout);
   },
   render: stat=>{
+    console.log("render status:", stat);
     switch(stat){
       case actEnm.action_rfReceived:  status._render(status.rx, 'rfOk'); break;
+
       case actEnm.action_rfSentOk:    status._render(status.tx, 'rfOk'); break;
       case actEnm.action_rfSentFail: status._render(status.tx, 'rfFail', 2000); break;
       case actEnm.action_rfSentRetry: status._render(status.tx, 'rfRetry'); break;
 
-      case actEnm.action_wsConnected: status.st.className='warn'; break;
-      case actEnm.action_wsOffline: status.st.className='err'; break;
-
+      case actEnm.action_rfOffline: 
+        console.log("status: action_rfOffline", stat);
+        status.st.className='err'; break;
+      case actEnm.action_wsOffline: 
+        console.log("status: action_wsOffline", stat);
+        status.st.className='err'; break;
+      case actEnm.action_wsConnected:
+        console.log("status: action_wsConnected", stat);
+        status.st.className='online'; break;
+      case actEnm.action_rfOnline: 
+        console.log("status: action_rfOnline", stat);
+        status.st.className='online'; break;
     }
   }
 };

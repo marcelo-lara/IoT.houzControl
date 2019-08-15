@@ -2,7 +2,7 @@
 const render={
     device: dev=>{
         const target=dev.elem;
-        if(target===null) return;
+        if(target===null || dev.id==0) return;
         if(dev.iVal===undefined) dev.iVal=0;
         if(dev.fVal===undefined) dev.fVal=0;
         console.log("render", dev);

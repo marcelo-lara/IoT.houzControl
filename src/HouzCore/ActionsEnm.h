@@ -11,4 +11,5 @@
 #define action_irReceived   0x10
 #define action_wsConnected  0x11
 #define action_wsOffline    0x12
-#define action_rfOnline     0x14
+#define action_rfOffline    0x14
+#define action_rfOnline     0x15

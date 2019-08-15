@@ -5,16 +5,13 @@ let _socket = new WebSocket("ws://192.168.1.100/");
 
 _socket.onopen = (ev)=>{
   status.render(actEnm.action_wsConnected);
-  console.log("ws connected..", ev);
 };
 _socket.onclose = (ws, ev)=>{
   status.render(actEnm.action_wsOffline);
-  console.log("ws disconnected..", ws, ev);
 };
 
 _socket.onmessage=(ev)=>{
   const _upd=JSON.parse(ev.data);
-  console.log("ws:", actEnm.action_wsConnected);
   console.log("received", _upd);
   if(_upd.act==actEnm.action_wsConnected){
     deviceHandler.bind(_upd);

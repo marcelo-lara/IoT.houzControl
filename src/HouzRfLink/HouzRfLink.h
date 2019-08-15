@@ -19,4 +19,5 @@ private:
     unsigned long rfEncode(DevicePkt dev);
     DevicePkt rfDecode(unsigned long payload, int nodeId);
     void sendNext();
+    DevicePkt getActNotification(int action);
 };

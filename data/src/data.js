@@ -59,7 +59,9 @@ const actEnm={
     action_irReceived: 0x10,
     action_wsConnected: 0x11,
     action_wsOffline: 0x12,
-    action_rfOnline: 0x14
+    action_rfOffline: 0x14,
+    action_rfOnline: 0x15
+
   };
 
 const cmdEnm={

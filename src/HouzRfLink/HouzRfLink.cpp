@@ -60,6 +60,8 @@ void HouzRfLink::init(){
     }else{
       Serial.println("radio\tonline");
     }
+    rfInQueue.enqueue(getActNotification(radioReady?action_rfOnline:action_rfOffline));
+
 }
 
 bool HouzRfLink::hasData(){
@@ -71,7 +73,8 @@ bool HouzRfLink::hasData(){
   sendNext();
 
 	uint8_t _radioNode;
-	if (!radio.available(&_radioNode)) return false;
+	if (!radio.available(&_radioNode)) 
+    return !rfInQueue.isEmpty();
 
 	//get payload
 	unsigned long _radioPayLoad;
@@ -85,11 +88,6 @@ bool HouzRfLink::hasData(){
   //decode packet
   DevicePkt pkt = rfDecode(_radioPayLoad, _radioNode);
   rfInQueue.enqueue(pkt);
-  Serial.print("RFrec> n");
-  Serial.print(_radioNode, HEX);
-  Serial.print(":");
-  Serial.println(_radioPayLoad, HEX);
-
   return true;
 }
 
@@ -132,23 +130,23 @@ void HouzRfLink::sendNext(){
   };
   u32 msg = rfEncode(dev);
 
-  //notify
-  Serial.print("RFsnd> n");
-  Serial.print(dev.node);
-  Serial.print(":");
-  Serial.print(msg, HEX);
-
   //rf send
   radio.stopListening();
   radio.openWritingPipe(writeAddress);
   bool result = 0;
   result = radio.write(&msg, sizeof(unsigned long), 0);
-
   radio.startListening();
-  Serial.println(result?" ok":" error");
+
+  //notify clients
+  rfInQueue.enqueue(getActNotification(result?action_rfSentOk:action_rfSentFail));
 };
 
-
+DevicePkt HouzRfLink::getActNotification(int action){
+  DevicePkt actPkt;
+  actPkt.id=server_node;
+  actPkt.payload=action;
+  return actPkt;
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
