@@ -1,3 +1,4 @@
+#pragma once
 //////////////////////////////////////
 // IMPORTANT: changes must be reflected on client side
 
