@@ -52,7 +52,7 @@ void loop(){
   houzCore.timer();
   updateTimer();
   if(houzLink.hasData()){
-    handleRecevice(houzLink.update());
+    handleRecevice(houzLink.getData());
   };
 };
 

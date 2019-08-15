@@ -11,7 +11,7 @@ public:
     bool status();
     void init();
     bool hasData();
-    DevicePkt update();
+    DevicePkt getData();
     bool send(DevicePkt dev);
 
 private:

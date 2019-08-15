@@ -7,5 +7,5 @@ class HouzLink{
         virtual bool status() = 0;
         virtual void init() = 0;
         virtual bool hasData() = 0;
-        virtual DevicePkt update() = 0;
+        virtual DevicePkt getData() = 0;
 };

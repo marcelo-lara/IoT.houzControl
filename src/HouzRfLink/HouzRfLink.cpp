@@ -97,7 +97,7 @@ bool HouzRfLink::status(){
     return radioReady;
 }
 
-DevicePkt HouzRfLink::update(){
+DevicePkt HouzRfLink::getData(){
   try
   {
     return rfInQueue.dequeue();
