@@ -189,11 +189,12 @@ void onWsEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventTyp
   switch (type) {
     case WS_EVT_CONNECT:
       ws.text(client->id(), houzCore.json_getDeviceList());
+      Serial.println((int)ws.count());
       break;
 
     case WS_EVT_DISCONNECT:
       Serial.print("disconnected ");
-      Serial.println(client->remoteIP());
+      Serial.println((int)ws.count());
       break;
   }
 }
@@ -213,7 +214,7 @@ void onNotFound(AsyncWebServerRequest *request){
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// HouzServer
+// SocketsHandler
 void handleSend(String msg, int clientId){
   DynamicJsonDocument jdev(1024);
   DeserializationError error = deserializeJson(jdev, msg);
@@ -229,17 +230,42 @@ void handleSend(String msg, int clientId){
 
   //deliver packet
   houzLink.send(dev);
+
+  //ack client
+  handleServerAct(action_ack);
 };
 
 void handleRecevice(Device dev){
-  houzCore.updateDevice(dev);
+  if(dev.id!=server_node)
+    houzCore.updateDevice(dev);
 
-  //build json
-  String msg = "{\"act\":4,\"dev\":";
-  msg += houzCore.json_getDevice(dev.id);
+  // build json /////
+  String msg = "{";
+  
+  //act
+  msg +="\"act\":";
+  msg += dev.id==server_node?
+    dev.payload //event
+    :4;         //or deviceUpdate
+
+  //device
+  if(dev.id!=server_node){
+    msg +=",\"dev\":";
+    msg += houzCore.json_getDevice(dev.id);
+  }
+
   msg += "}";
 
   //broadcast
   ws.textAll(msg);
 }
 
+void handleServerAct(int action){
+//build json
+  String msg = "{\"act\":";
+  msg += action;
+  msg += "}";
+
+//deliver
+  ws.textAll(msg);
+}

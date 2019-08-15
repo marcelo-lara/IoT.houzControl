@@ -1,6 +1,6 @@
 #pragma once
-
 #include "Arduino.h"
+#include "ActionsEnm.h"
 #include <EEPROM.h>
 #include "devs.h"
 
