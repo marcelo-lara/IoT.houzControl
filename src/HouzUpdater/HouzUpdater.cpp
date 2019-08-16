@@ -43,6 +43,7 @@ void HouzUpdater::init(){
 }
 
 void HouzUpdater::update(){
+  //TODO: timerUpdates should not happen when a user is logged in
   switch (nodeUpdate.status)
   {
   case nodeUpdate_idle:
