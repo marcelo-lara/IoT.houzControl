@@ -1,6 +1,3 @@
-//WebSocket mix
-
-//const socket = new WebSocket("ws:" + window.location.href.replace(window.location.protocol,""));
 let _socket = new WebSocket("ws://192.168.1.100/");
 
 _socket.onopen = (ev)=>{
@@ -30,25 +27,3 @@ const socket ={
   }
   
 }
-
-//Socket.Io mix
-// const socket = io.connect("ws:" + window.location.href.replace(window.location.protocol,""));
-
-// socket.on('connected', () => {
-//   console.log('Socket Connected')
-// })
-// socket.on('disconnect', () => {
-//   console.log('Socket Disconnected')
-// })
-
-// socket.on('data', data => {
-//   console.log('data>>', data);
-//   if(data.devices) devices=data.devices;
-//   if(data.typeEnm) typeEnm=data.typeEnm;
-//   if(data.cmdEnm) cmdEnm=data.cmdEnm;
-//   if(data.actEnm) actEnm=data.actEnm;
-//   if(data.statusEnm) statusEnm=data.statusEnm;
-//   deviceHandler.bind();
-// });
-
-// socket.on('update', deviceHandler.update) //delegate update handling
