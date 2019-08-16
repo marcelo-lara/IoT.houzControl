@@ -59,8 +59,12 @@ void HouzRfLink::init(){
       radio.printDetails();
     }else{
       Serial.println("radio\tonline");
-    }
-    rfInQueue.enqueue(getActNotification(radioReady?action_rfOnline:action_rfOffline));
+    };
+
+    //
+    rfInQueue.enqueue(
+      getDevice(server_node, server_rf, (radioReady?action_rfOnline:action_rfOffline))
+    );
 
 }
 
@@ -141,6 +145,9 @@ void HouzRfLink::sendNext(){
   rfInQueue.enqueue(getActNotification(result?action_rfSentOk:action_rfSentFail));
 };
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// HELPERS
 DevicePkt HouzRfLink::getActNotification(int action){
   DevicePkt actPkt;
   actPkt.id=server_node;
@@ -148,6 +155,13 @@ DevicePkt HouzRfLink::getActNotification(int action){
   return actPkt;
 }
 
+DevicePkt HouzRfLink::getDevice(int nodeId, int deviceId, u32 payload){
+  DevicePkt actPkt;
+  actPkt.node=nodeId;
+  actPkt.id=deviceId;
+  actPkt.payload=payload;
+  return actPkt;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // RF CODEC

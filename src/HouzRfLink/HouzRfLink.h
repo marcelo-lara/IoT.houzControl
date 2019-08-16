@@ -3,7 +3,6 @@
 #include "../HouzCore/HouzLink.h"
 
 class HouzRfLink : public HouzLink {
-private:
 public:
     HouzRfLink();
     ~HouzRfLink();
@@ -20,4 +19,6 @@ private:
     DevicePkt rfDecode(unsigned long payload, int nodeId);
     void sendNext();
     DevicePkt getActNotification(int action);
+    DevicePkt getDevice(int nodeId, int deviceId, u32 payload);
+
 };
