@@ -30,6 +30,9 @@ HouzCore houzCore;
 
 #include "src/HouzRfLink/HouzRfLink.h"
 HouzRfLink houzLink;
+#include "src/HouzUpdater/HouzUpdater.h"
+HouzUpdater updater(houzLink);
+
 
 void setup(){
   Serial.begin(115200);
@@ -43,88 +46,17 @@ void setup(){
 
 //rf setup
   houzLink.init();
-  updateTimerInit();
+  updater.init();
 };
 
 void loop(){
   wemosWiFi.update();
   uiUpdate();
   houzCore.timer();
-  updateTimer();
+  updater.update();
   if(houzLink.hasData()){
     handleRecevice(houzLink.getData());
   };
-};
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// updateTimer
-#define nodeUpdate_pending 0
-#define nodeUpdate_waiting 1
-#define nodeUpdate_ok      2
-#define nodeUpdate_idle    3
-
-struct NodeUpdate{
-  u8 nodeId;
-  unsigned long timeout;
-  u8 status;
-  int currNode;
-};
-int nodeList[] = {living_node, office_node, suite_node};
-int nodeListLenght = 2;
-NodeUpdate nodeUpdate;
-void updateTimerInit(){
-  
-  nodeUpdate.nodeId = nodeList[0];
-  nodeUpdate.currNode = 0;
-  nodeUpdate.status = nodeUpdate_pending;
-};
-void updateTimer(){
-  switch (nodeUpdate.status)
-  {
-  case nodeUpdate_idle:
-  case nodeUpdate_pending:
-    if(millis()<nodeUpdate.timeout) return;
-    return upateTimer_call();
-    break;
-
-  case nodeUpdate_ok:
-  case nodeUpdate_waiting:
-    if(millis()<nodeUpdate.timeout) return;
-    //TODO: store node status
-    upateTimer_next();
-    break;
-  
-  default:
-    break;
-  }
-};
-
-//TODO: make timers configurable via API
-void upateTimer_next(){
-  //seek next node
-  nodeUpdate.currNode++;
-  if(nodeUpdate.currNode>nodeListLenght){
-    nodeUpdate.status=nodeUpdate_idle;
-    nodeUpdate.currNode=0;
-    nodeUpdate.timeout=millis()+600000; //10m: (5*60*1000));
-  }else{
-    nodeUpdate.status=nodeUpdate_pending;
-    nodeUpdate.timeout=millis()+10000;  //10s: (2*1000));
-  }
-  nodeUpdate.nodeId = nodeList[nodeUpdate.currNode];
-}
-
-void upateTimer_call(){
-    nodeUpdate.status=nodeUpdate_waiting;
-    nodeUpdate.timeout=millis()+1000;
-    DevicePkt pkt;
-    pkt.id=nodeUpdate.nodeId;
-    pkt.node=nodeUpdate.nodeId;
-    pkt.payload=0;
-    pkt.cmd=10;
-    if(houzLink.send(pkt)){
-      nodeUpdate.status=nodeUpdate_ok;
-    };
 };
 
 //TODO: make ui abstract
@@ -189,12 +121,9 @@ void onWsEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventTyp
   switch (type) {
     case WS_EVT_CONNECT:
       ws.text(client->id(), houzCore.json_getDeviceList());
-      Serial.println((int)ws.count());
       break;
 
     case WS_EVT_DISCONNECT:
-      Serial.print("disconnected ");
-      Serial.println((int)ws.count());
       break;
   }
 }
@@ -236,6 +165,7 @@ void handleSend(String msg, int clientId){
 };
 
 void handleRecevice(Device dev){
+  uiNotify();
   if(dev.id!=server_node)
     houzCore.updateDevice(dev);
 
