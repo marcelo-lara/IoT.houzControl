@@ -70,3 +70,11 @@ typedef struct DevicePkt : Device {
   u8 cmd;
 };
 
+#define __Enviroment_log 5
+typedef struct Enviroment : Device {
+public:
+  float temp[__Enviroment_log];
+  float humidity[__Enviroment_log];
+  float pressure[__Enviroment_log];
+  int   light[__Enviroment_log];
+};
