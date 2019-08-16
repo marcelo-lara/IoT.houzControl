@@ -8,17 +8,20 @@
 #include "../HouzRfLink/HouzRfLink.h"
 #include "HouzUpdater.h"
 
-
+//TODO: keep node status on deviceModel
 struct NodeUpdate{
   u8 nodeId;
   unsigned long timeout;
   u8 status;
   int currNode;
 };
+
+//TODO: instead of calling nodes, call devices
 int nodeList[] = {living_node, office_node, suite_node};
 int nodeListLenght = 2;
 NodeUpdate nodeUpdate;
 
+//TODO: update enviroment
 
 HouzUpdater::HouzUpdater(HouzRfLink &houzLink){
     link = &houzLink;
