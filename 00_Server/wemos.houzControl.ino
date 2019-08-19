@@ -31,7 +31,7 @@ HouzCore houzCore;
 #include "src/HouzRfLink/HouzRfLink.h"
 HouzRfLink houzLink;
 #include "src/HouzUpdater/HouzUpdater.h"
-HouzUpdater updater(houzLink);
+HouzUpdater updater(houzLink, houzCore);
 
 
 void setup(){

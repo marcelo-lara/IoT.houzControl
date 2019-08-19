@@ -89,6 +89,12 @@ bool HouzRfLink::hasData(){
 	//prepare for next packet
 	radio.startListening();
 
+  Serial.print("rfIn\t");
+  Serial.print(_radioNode, HEX);
+  Serial.print(":");
+  Serial.println(_radioPayLoad, HEX);
+
+
   //decode packet
   DevicePkt pkt = rfDecode(_radioPayLoad, _radioNode);
   rfInQueue.enqueue(pkt);
@@ -141,6 +147,12 @@ void HouzRfLink::sendNext(){
   result = radio.write(&msg, sizeof(unsigned long), 0);
   radio.startListening();
 
+  Serial.print("rfOut\t");
+  Serial.print(dev.node, HEX);
+  Serial.print(":");
+  Serial.print(msg, HEX);
+  Serial.println(result?" ok":" err");
+  
   //notify clients
   rfInQueue.enqueue(getActNotification(result?action_rfSentOk:action_rfSentFail));
 };

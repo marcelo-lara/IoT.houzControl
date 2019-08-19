@@ -14,11 +14,13 @@ int __devices_count = 0;
 
 Device devices[]={
         //living 
+        {living_node,         living_node,0,deviceType_node}, 
         {living_mainLight,    living_node,0,0}, 
         {living_dicroLight,   living_node,0,0}, 
         {living_spotLight,    living_node,0,0}, 
         {living_fxLight,      living_node,0,0}, 
         //suite
+        {suite_node,          suite_node,0,deviceType_node}, 
         {suite_light,         suite_node,0,0}, 	    
         {suite_fan,           suite_node,0,0}, 	    
         {suite_AC,            suite_node,0,0}, 	    
@@ -26,7 +28,8 @@ Device devices[]={
         {suite_temp,          suite_node,0,deviceType_float}, 	  
         {suite_humidity,      suite_node,0,deviceType_float}, 	
         {suite_pressure,      suite_node,0,deviceType_pressure}, 
-        //office	
+        //office
+        {office_node,         office_node,0,deviceType_node}, 
         {office_AC,           office_node,0,0},
         {office_AC_temp,      office_node,0,0},
         {office_light,        office_node,0,0},

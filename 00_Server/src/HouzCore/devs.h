@@ -54,8 +54,9 @@
 
 
 #define deviceType_generic  0
-#define deviceType_float    1
-#define deviceType_pressure 2
+#define deviceType_node     1
+#define deviceType_float    2
+#define deviceType_pressure 3
 
 // Device data
 typedef struct Device {
@@ -64,6 +65,7 @@ public:
 	u8 node;
 	unsigned long payload;
   u8 type; //deviceType defines
+  // explicit operator DevicePkt() const { return ; }
 };
 
 typedef struct DevicePkt : Device {
