@@ -6,7 +6,6 @@
 #define server_node			0x00    //N0DA000000 ping?
 #define server_rf 			0x01    // 0: offline / 1: online 
 
-
 // Office
 #define office_node			  0x1  //N1DC04F0F0
 #define office_AC			    0x11 //Air Conditioner on/off
@@ -73,10 +72,18 @@ typedef struct DevicePkt : Device {
 };
 
 #define __Enviroment_log 5
-typedef struct Enviroment : Device {
+typedef struct EnviromentLog : Device {
 public:
   float temp[__Enviroment_log];
   float humidity[__Enviroment_log];
   float pressure[__Enviroment_log];
   int   light[__Enviroment_log];
+};
+typedef struct Enviroment : Device {
+public:
+  float temp;
+  float humidity;
+  float pressure;
+  int   light;
+  long  timeStamp;
 };

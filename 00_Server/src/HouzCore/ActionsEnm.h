@@ -13,3 +13,8 @@
 #define action_wsOffline    0x12
 #define action_rfOffline    0x14
 #define action_rfOnline     0x15
+
+#define action_swClick      0xA1
+#define action_swDblClick   0xA2
+#define action_swLongPress  0xB1
+#define action_swScenePress 0xB2

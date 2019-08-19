@@ -3,6 +3,9 @@
 #include "ActionsEnm.h"
 #include "Arduino.h"
 
+#include <QueueArray.h>
+QueueArray <DevicePkt> taskQueue;
+
 //////////////////////
 // devices
 int __nodes[] = {
@@ -140,3 +143,29 @@ String HouzCore::json_getDevice(Device dev){
     msg += "}";
     return msg;
 };
+
+void HouzCore::showDevice(DevicePkt devPkt, Stream* out){
+  out->print("n");
+  out->print(devPkt.node);
+  out->print(".");
+  out->print(devPkt.cmd, HEX);
+  out->print(devPkt.id, HEX);
+  out->print(devPkt.payload, HEX);
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//tasks
+bool HouzCore::hasTask(){
+  return !taskQueue.isEmpty();
+};
+DevicePkt HouzCore::getTask(){
+  return taskQueue.dequeue();
+};
+bool HouzCore::setTask(DevicePkt _task){
+  taskQueue.enqueue(_task);
+};
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// weather
+
