@@ -14,6 +14,10 @@
 #include "src/wemos_WiFi/wemos_WiFi.h"
 #include "Arduino.h"
 
+#include <BME280I2C.h>
+#include <Wire.h>
+BME280I2C bme;
+
 //Houz
 #include "src/HouzCore/devs.h"
 #include "src/HouzCore/HouzCore.h"
@@ -28,15 +32,17 @@ void setup(){
   // pinMode(wallSwitch, INPUT_PULLUP);  //D0 Wall Switch
   pinMode(statusLed,  OUTPUT);        //D3 Wall StatusLed
   pinMode(relayOut,   OUTPUT);        //D4 builtIn led
-  digitalWrite(relayOut, LOW);
+  setCeilingLight(1);
   digitalWrite(statusLed, HIGH);
 
   Serial.begin(115200);
   Serial.println("\n\n:: Houz office node");
   wemosWiFi.connect("houz_office");
 
+  enviromentSetup();
+
   analogWrite(statusLed, 200);
-  digitalWrite(relayOut, HIGH);
+  setCeilingLight(0);
 
 };
 
@@ -63,8 +69,36 @@ void handleTask(DevicePkt dev){
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Enviroment bme280
+void enviromentSetup(){
+  Wire.begin();
+  int retry =0;
+  bool bmeFound = false;
+  Serial.print("bme280\t\t");
+  while(!bmeFound && retry<10)
+  {
+    bmeFound=bme.begin();
+    if(bmeFound) continue;
+    Serial.print(".");
+    delay(500);
+    retry++;
+  }
+  Serial.println(bmeFound?" online":" offline");
+};
 
+Enviroment getEnviroment(){
+  //read values
+   float temp(NAN), hum(NAN), pres(NAN);
+   BME280::TempUnit tempUnit(BME280::TempUnit_Celsius);
+   BME280::PresUnit presUnit(BME280::PresUnit_hPa);
+   bme.read(pres, temp, hum, tempUnit, presUnit);
 
+  //store read values
+   Enviroment env;
+   env.temp=temp;
+   env.humidity=hum;
+   env.pressure=pres;
+   return env;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Wall Switch
@@ -93,8 +127,6 @@ void handleWallSwitch(DevicePkt dev){
         break;
       }
     break;
-
-
   }
 }
 
