@@ -28,6 +28,7 @@ class HouzCore{
     void timer();
 
     void updateDevice(Device dev);
+    void updateDevice(int devId, unsigned long payload);
     Device getDevice(u8 deviceId);
     void showDevice(DevicePkt devPkt, Stream* out);
 

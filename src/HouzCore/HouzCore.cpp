@@ -100,6 +100,12 @@ void HouzCore::updateDevice(Device dev){
     }
   }
 }
+void HouzCore::updateDevice(int devId, unsigned long payload){
+  Device dd;
+  dd.id=devId;
+  dd.payload=payload;
+  updateDevice(dd);
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////

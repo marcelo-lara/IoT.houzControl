@@ -37,7 +37,7 @@ HouzUpdater updater(houzLink, houzCore);
 void setup(){
   Serial.begin(115200);
   Serial.println("\n\n::: WeMos Houz Server :::");
-  wemosWiFi.connect();
+  wemosWiFi.connect("houz_server");
 
 //fs setup
   fsInit();

@@ -17,15 +17,16 @@ HouzButton button(office_switch, wallSwitch);
 
 
 OfficeNode::OfficeNode(HouzCore* _core){
+  pinMode(statusLed,  OUTPUT);        //D3 Wall StatusLed
+  pinMode(relayOut,   OUTPUT);        //D4 builtIn led
+  setCeilingLight(1);
+  digitalWrite(statusLed, HIGH);
+
   button.setup(_core);
   core = _core;
 }
 
 void OfficeNode::setup(){
-  pinMode(statusLed,  OUTPUT);        //D3 Wall StatusLed
-  pinMode(relayOut,   OUTPUT);        //D4 builtIn led
-  setCeilingLight(1);
-  digitalWrite(statusLed, HIGH);
 
   enviromentSetup();
 
@@ -120,6 +121,7 @@ bool OfficeNode::setCeilingLight(int _state){
   if(_state==-1) _state=!(getCeilingLight());//toggle
   if(_state>1) _state=1;
   digitalWrite(relayOut, !_state);
+  core->updateDevice(office_light, _state);
 }
 bool OfficeNode::getCeilingLight(){
   return digitalRead(relayOut)==0;
