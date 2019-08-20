@@ -16,13 +16,15 @@ uint8_t switchButton;
 int _lastStatus;
 int _currStatus;
 
-HouzButton::HouzButton(u8 _deviceId, uint8_t _switchButton, HouzCore* _core){
-    core=_core;
-    device=_core->getDevice(_deviceId); //FIXME: getDevice is not returning 
+HouzButton::HouzButton(u8 _deviceId, uint8_t _switchButton){
     device.id=_deviceId;
     switchButton=_switchButton;
     pinMode(switchButton, INPUT_PULLUP);
 	_lastStatus=digitalRead(switchButton);
+};
+
+void HouzButton::setup(HouzCore* _core){
+  core=_core;
 };
 
 unsigned long _sw_timerStart;
