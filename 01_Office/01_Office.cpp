@@ -6,6 +6,12 @@
 #include "src/HouzCore/HouzButton.h"
 #include "Arduino.h"
 
+//Infrared
+#include <IRremoteESP8266.h>
+#include <IRsend.h>
+
+IRsend irsend(irSendPin);
+
 //Enviroment
 #include <BME280I2C.h>
 #include <Wire.h>
@@ -17,8 +23,8 @@ HouzButton button(office_switch, wallSwitch);
 
 
 OfficeNode::OfficeNode(HouzCore* _core){
-  pinMode(statusLed,  OUTPUT);        //D3 Wall StatusLed
-  pinMode(relayOut,   OUTPUT);        //D4 builtIn led
+  pinMode(statusLed,  OUTPUT);
+  pinMode(relayOut,   OUTPUT);
   setCeilingLightStatus(1);
   digitalWrite(statusLed, HIGH);
 
@@ -30,10 +36,15 @@ OfficeNode::OfficeNode(HouzCore* _core){
   ceilingLight.node = office_node;
 
 }
+void OfficeNode::setAC(){
+  //TODO: implement https://github.com/crankyoldgit/IRremoteESP8266/blob/master/examples/LGACSend/LGACSend.ino; or better, create AC delegate
+	irsend.sendLG(0x88C0051, 28); //turn off 
+}
 
 void OfficeNode::setup(){
 
   enviromentSetup();
+  irsend.begin();
 
   analogWrite(statusLed, 200);
   setCeilingLightStatus(0);

@@ -7,6 +7,7 @@
 #define statusLed    0 // D3 Wall StatusLed
 #define wifiLed      2 // D4 builtIn led
 #define relayOut    12 // D6 relay out
+#define irSendPin   13 // D7 infrared signal out
 
 #include "src/HouzCore/HouzButton.h"
 #include "src/HouzCore/HouzCore.h"
@@ -26,6 +27,7 @@ public:
   //devices
   Device ceilingLight;
   Enviroment enviroment;
+  void setAC(); //TODO: handle air conditioner fx
 
 private:
   bool setCeilingLightStatus(int _state);

@@ -21,11 +21,6 @@ OfficeNode office(&houzCore);
 AsyncWebServer server(80);
 AsyncWebSocket ws("/");
 
-#include <IRremoteESP8266.h>
-#include <IRsend.h>
-#define IR_SEND_PIN 13
-IRsend irsend(IR_SEND_PIN);
-
 void setup(){
   Serial.begin(115200);
   Serial.println("\n\n:: Houz office node");
@@ -34,7 +29,6 @@ void setup(){
   office.setup();
   webInit();
 
-  irsend.begin();
 
 };
 
@@ -76,7 +70,6 @@ void onPostTask(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_
   Serial.println("--onPostTask");
   Serial.println(inData);
   Serial.println("-------------");
-	irsend.sendLG(0x88C0051, 28);
 
   request->send(200, "application/json", "{\"status\":\"ok\"}");
 
