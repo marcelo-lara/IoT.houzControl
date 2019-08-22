@@ -47,6 +47,7 @@ void webInit(){
   server.on("/api/task", HTTP_POST, nullAsyncWebServerRequest, nullFileRequest, onPostTask);
   server.onNotFound(onNotFound);
   server.begin();
+  Serial.println("server\tonline");
 }
 
 void nullFileRequest(AsyncWebServerRequest *request, const String& filename, size_t index, uint8_t *data, size_t len, bool final){};
@@ -66,11 +67,13 @@ void onGetStatus(AsyncWebServerRequest *request){
 }
 
 void onPostTask(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total){
-  String inData = (char*)data;
-  Serial.println("--onPostTask");
-  Serial.println(inData);
-  Serial.println("-------------");
-
-  request->send(200, "application/json", "{\"status\":\"ok\"}");
-
+  try
+  {
+    houzCore.setTask(JSON.parseDevicePkt((char*)data));
+    request->send(200, "application/json", "{\"status\":\"ok\"}");
+  }
+  catch(const std::exception& e)
+  {
+    request->send(500, "application/json", "{\"status\":\"error parsing task\"}");
+  }
 }

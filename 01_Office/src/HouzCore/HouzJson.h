@@ -6,6 +6,7 @@ typedef class HouzJson{
 public:
     String serialize(Enviroment env);
     String serialize(Device device);
+    DevicePkt parseDevicePkt(String jsonDevicePkt);
 private:
     String genAttr(String _var, float _val);
     String genAttr(String _var, int _val);

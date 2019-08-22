@@ -1,6 +1,7 @@
 #include "HouzJson.h"
 #include "devs.h"
 #include "Arduino.h"
+#include <ArduinoJson.h>
 
 String HouzJson::serialize(Enviroment env){
     String _env = "{";
@@ -20,6 +21,23 @@ String HouzJson::serialize(Device device){
     _dev += "}";
     return _dev;
 };
+
+DevicePkt HouzJson::parseDevicePkt(String jsonDevicePkt){
+  DevicePkt dev;
+  DynamicJsonDocument jdev(1024);
+  DeserializationError error = deserializeJson(jdev, jsonDevicePkt);
+  if (error) {
+    dev.cmd=0;
+    Serial.println("HouzJson::parseDevicePkt| error parsing message");
+    return dev;
+  }
+  dev.node = jdev["node"];
+  dev.id = jdev["id"];
+  dev.cmd = jdev["cmd"];
+  dev.payload = jdev["payload"];
+  return dev;
+};
+
 
 String HouzJson::genAttr(String _var, float _val){
     String _attr= "\""+ _var + "\":";
