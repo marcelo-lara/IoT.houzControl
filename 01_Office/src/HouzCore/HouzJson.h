@@ -3,6 +3,12 @@
 #include "devs.h"
 
 typedef class HouzJson{
-    String getEnviroment(Enviroment env);
-    String getDevice(Device device);
+public:
+    String serialize(Enviroment env);
+    String serialize(Device device);
+private:
+    String genAttr(String _var, float _val);
+    String genAttr(String _var, int _val);
+    String genAttr(String _var, unsigned long _val);
 };
+extern HouzJson JSON;
