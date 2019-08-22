@@ -19,11 +19,16 @@ HouzButton button(office_switch, wallSwitch);
 OfficeNode::OfficeNode(HouzCore* _core){
   pinMode(statusLed,  OUTPUT);        //D3 Wall StatusLed
   pinMode(relayOut,   OUTPUT);        //D4 builtIn led
-  setCeilingLight(1);
+  setCeilingLightStatus(1);
   digitalWrite(statusLed, HIGH);
 
   button.setup(_core);
   core = _core;
+
+  //set devices
+  ceilingLight.id = office_light;
+  ceilingLight.node = office_node;
+
 }
 
 void OfficeNode::setup(){
@@ -31,7 +36,7 @@ void OfficeNode::setup(){
   enviromentSetup();
 
   analogWrite(statusLed, 200);
-  setCeilingLight(0);
+  setCeilingLightStatus(0);
 
 };
 void OfficeNode::update(){
@@ -79,11 +84,10 @@ Enviroment OfficeNode::getEnviroment(){
    bme.read(pres, temp, hum, tempUnit, presUnit);
 
   //store read values
-   Enviroment env;
-   env.temp=temp;
-   env.humidity=hum;
-   env.pressure=pres;
-   return env;
+   enviroment.temp=temp;
+   enviroment.humidity=hum;
+   enviroment.pressure=pres;
+   return enviroment;
 }
 
 // Wall Switch
@@ -95,12 +99,12 @@ void OfficeNode::handle_WallSwitch(DevicePkt dev){
       
       //single click
       case action_swClick:
-        setCeilingLight(-1);//toggle
+        setCeilingLightStatus(-1);//toggle
         break;
 
       //double click
       case action_swDblClick:
-        setCeilingLight(0);
+        setCeilingLightStatus(0);
         break;
 
       //long press
@@ -117,12 +121,12 @@ void OfficeNode::handle_WallSwitch(DevicePkt dev){
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Ceiling Light
-bool OfficeNode::setCeilingLight(int _state){
-  if(_state==-1) _state=!(getCeilingLight());//toggle
+bool OfficeNode::setCeilingLightStatus(int _state){
+  if(_state==-1) _state=!(getCeilingLightStatus());//toggle
   if(_state>1) _state=1;
   digitalWrite(relayOut, !_state);
   core->updateDevice(office_light, _state);
 }
-bool OfficeNode::getCeilingLight(){
+bool OfficeNode::getCeilingLightStatus(){
   return digitalRead(relayOut)==0;
 }

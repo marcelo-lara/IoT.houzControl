@@ -4,6 +4,7 @@
 
 //Houz
 #include "src/HouzCore/HouzCore.h"
+#include "src/HouzCore/HouzJson.h"
 #include "src/HouzCore/devs.h"
 #include "01_Office.h"
 HouzCore houzCore;
@@ -20,6 +21,11 @@ OfficeNode office(&houzCore);
 AsyncWebServer server(80);
 AsyncWebSocket ws("/");
 
+#include <IRremoteESP8266.h>
+#include <IRsend.h>
+#define IR_SEND_PIN 13
+IRsend irsend(IR_SEND_PIN);
+
 void setup(){
   Serial.begin(115200);
   Serial.println("\n\n:: Houz office node");
@@ -27,6 +33,8 @@ void setup(){
   wemosWiFi.connect("houz_office");
   office.setup();
   webInit();
+
+  irsend.begin();
 
 };
 
@@ -42,24 +50,34 @@ void loop(){
 void webInit(){
   //server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html");
   server.on("/api",HTTP_GET,onGetStatus);
+  server.on("/api/task", HTTP_POST, nullAsyncWebServerRequest, nullFileRequest, onPostTask);
   server.onNotFound(onNotFound);
   server.begin();
 }
 
-void onNotFound(AsyncWebServerRequest *request){
-    request->send(404, "text/plain", "Houz :: Not found");
-}
+void nullFileRequest(AsyncWebServerRequest *request, const String& filename, size_t index, uint8_t *data, size_t len, bool final){};
+void nullAsyncWebServerRequest(AsyncWebServerRequest *request){};
+void onNotFound(AsyncWebServerRequest *request){request->send(404, "text/plain", "Houz :: Not found");};
+
 
 void onGetStatus(AsyncWebServerRequest *request){
-  String json = "{";
-  json += "\"node\":\"office\",";
-  json += "\"light\":"+ (String)(office.getCeilingLight()?"1":"0") + ",";
-  json += "\"env\":";
+  String _json = "{";
+  _json += "\"node\":\"office\",";
+  _json += "\"dev\":[" + JSON.serialize(office.ceilingLight) + "],";
+  _json += "\"env\":" + JSON.serialize(office.enviroment);
+  _json += "}";
 
-  
-  json += "}";
-
-  request->send(200, "application/json", json);
-  json = String();
+  request->send(200, "application/json", _json);
+  _json = String();
 }
 
+void onPostTask(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total){
+  String inData = (char*)data;
+  Serial.println("--onPostTask");
+  Serial.println(inData);
+  Serial.println("-------------");
+	irsend.sendLG(0x88C0051, 28);
+
+  request->send(200, "application/json", "{\"status\":\"ok\"}");
+
+}
