@@ -13,8 +13,19 @@ IRsend irsend(irSendPin);
 
 //Enviroment
 #include <BME280I2C.h>
+#include <EnvironmentCalculations.h>
 #include <Wire.h>
-BME280I2C bme;
+BME280I2C::Settings settings(
+   BME280::OSR_X1,
+   BME280::OSR_X1,
+   BME280::OSR_X1,
+   BME280::Mode_Forced,
+   BME280::StandbyTime_1000ms,
+   BME280::Filter_16,
+   BME280::SpiEnable_False,
+   BME280I2C::I2CAddr_0x76
+);
+BME280I2C bme(settings);
 
 //PushButton
 #include "src/HouzCore/HouzButton.h"
@@ -40,11 +51,11 @@ void OfficeNode::setup(){
 
   enviromentSetup();
   irsend.begin();
-
   analogWrite(statusLed, 200);
   setCeilingLightStatus(0);
 
 };
+
 void OfficeNode::update(){
   button.update();
   if(!core->hasTask()) return;
@@ -79,7 +90,8 @@ void OfficeNode::enviromentSetup(){
     delay(500);
     retry++;
   }
-  Serial.println(bmeFound?" online":" offline");
+  Serial.println(bmeFound?"online":" offline");
+  if(bmeFound) getEnviroment();
 };
 
 Enviroment OfficeNode::getEnviroment(){
@@ -88,8 +100,9 @@ Enviroment OfficeNode::getEnviroment(){
    BME280::TempUnit tempUnit(BME280::TempUnit_Celsius);
    BME280::PresUnit presUnit(BME280::PresUnit_hPa);
    bme.read(pres, temp, hum, tempUnit, presUnit);
-
+   
   //store read values
+   enviroment.dewPoint = EnvironmentCalculations::DewPoint(temp, hum, EnvironmentCalculations::TempUnit_Celsius);
    enviroment.temp=temp;
    enviroment.humidity=hum;
    enviroment.pressure=pres;
@@ -132,7 +145,8 @@ bool OfficeNode::setCeilingLightStatus(int _state){
   if(_state==-1) _state=!(getCeilingLightStatus());//toggle
   if(_state>1) _state=1;
   digitalWrite(relayOut, !_state);
-  core->updateDevice(office_light, _state);
+
+  ceilingLight.payload=_state;
 }
 bool OfficeNode::getCeilingLightStatus(){
   return digitalRead(relayOut)==0;

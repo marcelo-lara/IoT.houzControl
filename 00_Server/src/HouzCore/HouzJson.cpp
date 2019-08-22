@@ -8,6 +8,7 @@ String HouzJson::serialize(Enviroment env){
     _env += genAttr("temp", env.temp) + ",";
     _env += genAttr("humidity", env.humidity) + ",";
     _env += genAttr("pressure", env.pressure) + ",";
+    _env += genAttr("dewPoint", env.dewPoint) + ",";
     _env += genAttr("light", env.light);
     _env += "}";
     return _env;

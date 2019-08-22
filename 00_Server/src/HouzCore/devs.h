@@ -84,6 +84,7 @@ public:
   float temp;
   float humidity;
   float pressure;
+  float dewPoint;
   int   light;
   long  timeStamp;
 };
