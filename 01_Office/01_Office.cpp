@@ -9,7 +9,6 @@
 //Infrared
 #include <IRremoteESP8266.h>
 #include <IRsend.h>
-
 IRsend irsend(irSendPin);
 
 //Enviroment
@@ -35,10 +34,6 @@ OfficeNode::OfficeNode(HouzCore* _core){
   ceilingLight.id = office_light;
   ceilingLight.node = office_node;
 
-}
-void OfficeNode::setAC(){
-  //TODO: implement https://github.com/crankyoldgit/IRremoteESP8266/blob/master/examples/LGACSend/LGACSend.ino; or better, create AC delegate
-	irsend.sendLG(0x88C0051, 28); //turn off 
 }
 
 void OfficeNode::setup(){
@@ -75,7 +70,7 @@ void OfficeNode::enviromentSetup(){
   Wire.begin();
   int retry =0;
   bool bmeFound = false;
-  Serial.print("bme280\t\t");
+  Serial.print("bme280\t");
   while(!bmeFound && retry<10)
   {
     bmeFound=bme.begin();
@@ -101,6 +96,7 @@ Enviroment OfficeNode::getEnviroment(){
    return enviroment;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Wall Switch
 void OfficeNode::handle_WallSwitch(DevicePkt dev){
   switch (dev.cmd){
@@ -140,4 +136,12 @@ bool OfficeNode::setCeilingLightStatus(int _state){
 }
 bool OfficeNode::getCeilingLightStatus(){
   return digitalRead(relayOut)==0;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Air Conditioner
+void OfficeNode::setAC(){
+  //TODO: implement https://github.com/crankyoldgit/IRremoteESP8266/blob/master/examples/LGACSend/LGACSend.ino; or better, create AC delegate
+	irsend.sendLG(0x88C0051, 28); //turn off 
 }
