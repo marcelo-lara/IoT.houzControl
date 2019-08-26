@@ -12,20 +12,8 @@
 IRsend irsend(irSendPin);
 
 //Enviroment
-#include <BME280I2C.h>
-#include <EnvironmentCalculations.h>
-#include <Wire.h>
-BME280I2C::Settings settings(
-   BME280::OSR_X1,
-   BME280::OSR_X1,
-   BME280::OSR_X1,
-   BME280::Mode_Forced,
-   BME280::StandbyTime_1000ms,
-   BME280::Filter_16,
-   BME280::SpiEnable_False,
-   BME280I2C::I2CAddr_0x76
-);
-BME280I2C bme(settings);
+#include "src/HouzEnviroment\HouzEnviroment.h"
+HouzEnviroment envSensor;
 
 //PushButton
 #include "src/HouzCore/HouzButton.h"
@@ -49,10 +37,11 @@ OfficeNode::OfficeNode(HouzCore* _core){
 
 void OfficeNode::setup(){
 
-  enviromentSetup();
+  envSensor.init();
   irsend.begin();
   analogWrite(statusLed, 200);
   setCeilingLightStatus(0);
+  enviroment = envSensor.get();
 
 };
 
@@ -66,6 +55,10 @@ void OfficeNode::update(){
     handle_WallSwitch(dev); 
     break;
   
+  case office_AC:
+    setAC();
+    break;
+
   default:
     core->showDevice(dev, &Serial);
     Serial.println("???");
@@ -77,36 +70,11 @@ void OfficeNode::update(){
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Enviroment bme280
-void OfficeNode::enviromentSetup(){
-  Wire.begin();
-  int retry =0;
-  bool bmeFound = false;
-  Serial.print("bme280\t");
-  while(!bmeFound && retry<10)
-  {
-    bmeFound=bme.begin();
-    if(bmeFound) continue;
-    Serial.print(".");
-    delay(500);
-    retry++;
-  }
-  Serial.println(bmeFound?"online":" offline");
-  if(bmeFound) getEnviroment();
-};
+
 
 Enviroment OfficeNode::getEnviroment(){
-  //read values
-   float temp(NAN), hum(NAN), pres(NAN);
-   BME280::TempUnit tempUnit(BME280::TempUnit_Celsius);
-   BME280::PresUnit presUnit(BME280::PresUnit_hPa);
-   bme.read(pres, temp, hum, tempUnit, presUnit);
-   
-  //store read values
-   enviroment.dewPoint = EnvironmentCalculations::DewPoint(temp, hum, EnvironmentCalculations::TempUnit_Celsius);
-   enviroment.temp=temp;
-   enviroment.humidity=hum;
-   enviroment.pressure=pres;
-   return enviroment;
+  enviroment = envSensor.get();
+  return enviroment;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -141,6 +109,8 @@ void OfficeNode::handle_WallSwitch(DevicePkt dev){
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Ceiling Light
+
+//set ceilingLight relay status
 bool OfficeNode::setCeilingLightStatus(int _state){
   if(_state==-1) _state=!(getCeilingLightStatus());//toggle
   if(_state>1) _state=1;
@@ -148,6 +118,7 @@ bool OfficeNode::setCeilingLightStatus(int _state){
 
   ceilingLight.payload=_state;
 }
+//get ceilingLight relay status
 bool OfficeNode::getCeilingLightStatus(){
   return digitalRead(relayOut)==0;
 }
@@ -157,5 +128,6 @@ bool OfficeNode::getCeilingLightStatus(){
 // Air Conditioner
 void OfficeNode::setAC(){
   //TODO: implement https://github.com/crankyoldgit/IRremoteESP8266/blob/master/examples/LGACSend/LGACSend.ino; or better, create AC delegate
-	irsend.sendLG(0x88C0051, 28); //turn off 
+	Serial.println("setAC");
+  irsend.sendLG(0x88C0051, 28); //turn off 
 }

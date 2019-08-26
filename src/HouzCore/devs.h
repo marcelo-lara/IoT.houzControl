@@ -60,15 +60,15 @@
 // Device data
 typedef struct Device {
 public:
-  u8 id;
-	u8 node;
+  int id;
+	int node;
 	unsigned long payload;
-  u8 type; //deviceType defines
+  int type; //deviceType defines
   // explicit operator DevicePkt() const { return ; }
 };
 
 typedef struct DevicePkt : Device {
-  u8 cmd;
+  int cmd;
 };
 
 typedef struct Enviroment : Device {
