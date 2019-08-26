@@ -1,4 +1,4 @@
-#include "HouzRfLink.h"
+#include "HouzLink_rf.h"
 #include "Arduino.h"
 
 //Radio
@@ -27,15 +27,15 @@ QueueArray <DevicePkt> rfOutQueue;
 #define rf_wemos_rx		0xB4
 
 
-HouzRfLink::HouzRfLink(){
+HouzLink_rf::HouzLink_rf(){
 
 }
 
-HouzRfLink::~HouzRfLink(){
-    Serial.print("HouzRfLink::~HouzRfLink()");
+HouzLink_rf::~HouzLink_rf(){
+    Serial.print("HouzLink_rf::~HouzLink_rf()");
 }
 
-void HouzRfLink::init(){
+void HouzLink_rf::init(){
     radioReady=false;
     radio.begin();
     radio.setPALevel(RF24_PA_HIGH); //RF24_PA_HIGH | RF24_PA_LOW | RF24_PA_MAX
@@ -68,7 +68,7 @@ void HouzRfLink::init(){
 
 }
 
-bool HouzRfLink::hasData(){
+bool HouzLink_rf::hasData(){
 
 	//if radio is not enabled, discard anything
 	if (!radioReady) return false;
@@ -101,11 +101,11 @@ bool HouzRfLink::hasData(){
   return true;
 }
 
-bool HouzRfLink::status(){
+bool HouzLink_rf::status(){
     return radioReady;
 }
 
-DevicePkt HouzRfLink::getData(){
+DevicePkt HouzLink_rf::getData(){
   try
   {
     return rfInQueue.dequeue();
@@ -118,12 +118,12 @@ DevicePkt HouzRfLink::getData(){
   }
 }
 
-bool HouzRfLink::send(DevicePkt dev){
+bool HouzLink_rf::send(DevicePkt dev){
   rfOutQueue.enqueue(dev);
   return !rfOutQueue.isFull();
 };
 
-void HouzRfLink::sendNext(){
+void HouzLink_rf::sendNext(){
   if(rfOutQueue.isEmpty()) return;
   DevicePkt dev = rfOutQueue.dequeue();
 
@@ -160,14 +160,14 @@ void HouzRfLink::sendNext(){
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // HELPERS
-DevicePkt HouzRfLink::getActNotification(int action){
+DevicePkt HouzLink_rf::getActNotification(int action){
   DevicePkt actPkt;
   actPkt.id=server_node;
   actPkt.payload=action;
   return actPkt;
 }
 
-DevicePkt HouzRfLink::getDevice(int nodeId, int deviceId, u32 payload){
+DevicePkt HouzLink_rf::getDevice(int nodeId, int deviceId, u32 payload){
   DevicePkt actPkt;
   actPkt.node=nodeId;
   actPkt.id=deviceId;
@@ -177,7 +177,7 @@ DevicePkt HouzRfLink::getDevice(int nodeId, int deviceId, u32 payload){
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // RF CODEC
-unsigned long HouzRfLink::rfEncode(DevicePkt dev){
+unsigned long HouzLink_rf::rfEncode(DevicePkt dev){
 	unsigned long retVal = 0xD;
 	retVal = (retVal << 4) + dev.cmd;
 	retVal = (retVal << 8) + dev.id;
@@ -185,7 +185,7 @@ unsigned long HouzRfLink::rfEncode(DevicePkt dev){
 	return retVal;
 }
 
-DevicePkt HouzRfLink::rfDecode(unsigned long payload, int nodeId){
+DevicePkt HouzLink_rf::rfDecode(unsigned long payload, int nodeId){
 	DevicePkt decoded;
 
 	if (((payload >> 28) == 0xD)) {

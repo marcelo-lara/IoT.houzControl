@@ -2,10 +2,10 @@
 #include "../HouzCore/HouzCore.h"
 #include "../HouzCore/HouzLink.h"
 
-class HouzRfLink : public HouzLink {
+class HouzLink_rf : public HouzLink {
 public:
-    HouzRfLink();
-    ~HouzRfLink();
+    HouzLink_rf();
+    ~HouzLink_rf();
 
     bool status();
     void init();

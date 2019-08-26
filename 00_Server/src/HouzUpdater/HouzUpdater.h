@@ -1,18 +1,18 @@
 #pragma once
 #include "Arduino.h"
-#include "../HouzRfLink/HouzRfLink.h"
+#include "../HouzLink_rf/HouzLink_rf.h"
 #include "../HouzCore/HouzCore.h"
 
 class HouzUpdater {
 public:
-    HouzUpdater(HouzRfLink &houzLink, HouzCore &houzCore);
+    HouzUpdater(HouzLink_rf &houzLink, HouzCore &houzCore);
     void init();
     void update();
     void setInterval(int _action, int _seconds);
     void pauseUpdate();
 
 private:
-    HouzRfLink* link;
+    HouzLink_rf* link;
     HouzCore* core;
     void timerNext();
     void timerCall();

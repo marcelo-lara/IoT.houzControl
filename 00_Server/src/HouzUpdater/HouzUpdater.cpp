@@ -5,7 +5,7 @@
 #define devUpdate_idle    3
 
 #include "Arduino.h"
-#include "../HouzRfLink/HouzRfLink.h"
+#include "../HouzLink_rf/HouzLink_rf.h"
 #include "HouzUpdater.h"
 
 //TODO: keep node status on deviceModel
@@ -27,7 +27,7 @@ DevUpdate devUpdate;
 
 //TODO: update enviroment
 
-HouzUpdater::HouzUpdater(HouzRfLink &houzLink, HouzCore &houzCore ){
+HouzUpdater::HouzUpdater(HouzLink_rf &houzLink, HouzCore &houzCore ){
     link = &houzLink;
     core = &houzCore;
 

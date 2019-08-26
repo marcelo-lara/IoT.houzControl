@@ -29,8 +29,8 @@ AsyncWebSocket ws("/");
 #include "src/HouzCore/HouzJson.h"
 HouzCore houzCore;
 
-#include "src/HouzRfLink/HouzRfLink.h"
-HouzRfLink houzLink;
+#include "src/HouzLink_rf/HouzLink_rf.h"
+HouzLink_rf houzLink;
 #include "src/HouzUpdater/HouzUpdater.h"
 HouzUpdater updater(houzLink, houzCore);
 
