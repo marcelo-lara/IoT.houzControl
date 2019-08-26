@@ -26,6 +26,7 @@ AsyncWebSocket ws("/");
 //Houz
 #include "src/HouzCore/devs.h"
 #include "src/HouzCore/HouzCore.h"
+#include "src/HouzCore/HouzJson.h"
 HouzCore houzCore;
 
 #include "src/HouzRfLink/HouzRfLink.h"
@@ -145,22 +146,8 @@ void onNotFound(AsyncWebServerRequest *request){
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // SocketsHandler
 void handleSend(String msg, int clientId){
-  DynamicJsonDocument jdev(1024);
-  DeserializationError error = deserializeJson(jdev, msg);
-  if (error) {
-    Serial.println("error parsing message");
-    return;
-  }
-  DevicePkt dev;
-  dev.node = jdev["node"];
-  dev.id = jdev["id"];
-  dev.cmd = jdev["cmd"];
-  dev.payload = jdev["payload"];
-
-  //deliver packet
+  DevicePkt dev = JSON.parseDevicePkt(msg);
   houzLink.send(dev);
-
-  //ack client
   handleServerAct(action_ack);
 };
 
