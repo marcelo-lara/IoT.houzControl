@@ -3,7 +3,7 @@
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-00_Server\src\HouzCore
-00_Server\src\wemos_WiFi
-01_Office\src\HouzCore
-01_Office\src\wemos_WiFi
+00_Server/src/HouzCore
+00_Server/src/wemos_WiFi
+01_Office/src/HouzCore
+01_Office/src/wemos_WiFi
