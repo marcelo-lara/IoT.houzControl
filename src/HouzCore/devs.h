@@ -69,6 +69,14 @@ public:
 
 typedef struct DevicePkt : Device {
   int cmd;
+  explicit operator Device(){
+    Device d;
+    d.id=this->id;
+    d.node=this->node;
+    d.payload=this->payload;
+    d.type=this->type;
+    return d;
+  }
 };
 
 typedef struct Enviroment : Device {
