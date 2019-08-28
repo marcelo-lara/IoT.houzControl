@@ -2,9 +2,12 @@
 #include "devs.h"
 #include "ActionsEnm.h"
 #include "Arduino.h"
+#include <iostream>
+#include <iomanip>
 
 #include <QueueArray.h>
 QueueArray <DevicePkt> taskQueue;
+template<class T> inline Print &operator <<(Print &obj, T arg) { obj.print(arg); return obj; }
 
 //////////////////////
 // devices
