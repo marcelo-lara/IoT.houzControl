@@ -7,7 +7,6 @@
 #define btn_up 1
 
 #include "HouzButton.h"
-#include "HouzCore.h"
 #include "Arduino.h"
 
 HouzCore* core;

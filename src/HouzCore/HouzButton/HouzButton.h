@@ -1,5 +1,5 @@
 #pragma once
-#include "HouzCore.h"
+#include "../HouzCore.h"
 
 typedef class HouzButton{
 public:
