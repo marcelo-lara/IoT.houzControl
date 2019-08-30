@@ -1,8 +1,10 @@
 #pragma once
 #include "Arduino.h"
 #include "ActionsEnm.h"
+#include "Model/devs.h"
+#include "Model/HouzLink.h"
 #include <EEPROM.h>
-#include "devs.h"
+//#include "devs.h"
 
 // commands
 #define CMD_QUERY			0xA

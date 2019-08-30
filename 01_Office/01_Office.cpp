@@ -1,7 +1,6 @@
 #pragma once
 
 #include "01_Office.h"
-#include "src/HouzCore/devs.h"
 #include "src/HouzCore/HouzCore.h"
 #include "src/HouzCore/HouzButton.h"
 #include "Arduino.h"
@@ -12,7 +11,7 @@
 IRsend irsend(irSendPin);
 
 //Enviroment
-#include "src/HouzEnviroment\HouzEnviroment.h"
+#include "src/HouzEnviroment/HouzEnviroment.h"
 HouzEnviroment envSensor;
 
 //PushButton

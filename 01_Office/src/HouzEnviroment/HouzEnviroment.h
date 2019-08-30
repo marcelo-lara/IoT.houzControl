@@ -1,5 +1,5 @@
 #pragma once
-#include "../HouzCore/devs.h"
+#include "../HouzCore/HouzCore.h"
 #include <BME280I2C.h>
 #include <EnvironmentCalculations.h>
 

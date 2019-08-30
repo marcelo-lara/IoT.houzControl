@@ -1,5 +1,5 @@
 #include "HouzJson.h"
-#include "devs.h"
+#include "HouzCore.h"
 #include "Arduino.h"
 #include <ArduinoJson.h>
 

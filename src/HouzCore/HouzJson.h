@@ -1,6 +1,6 @@
 #pragma once
 #include "Arduino.h"
-#include "devs.h"
+#include "HouzCore.h"
 
 typedef class HouzJson{
 public:

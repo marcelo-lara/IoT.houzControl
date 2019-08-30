@@ -20,11 +20,11 @@
 #include <ESPAsyncWebServer.h>
 #include <ESP8266Wifi.h>
 #include <ArduinoJson.h>
+
 AsyncWebServer server(80);
 AsyncWebSocket ws("/");
 
 //Houz
-#include "src/HouzCore/devs.h"
 #include "src/HouzCore/HouzCore.h"
 #include "src/HouzCore/HouzJson.h"
 HouzCore houzCore;
