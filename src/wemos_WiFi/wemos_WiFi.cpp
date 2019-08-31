@@ -4,6 +4,7 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266mDNS.h>
 #include <ArduinoOTA.h>
+#define inLed 2 //onboard led
 
 void wemos_WiFi::connect() {
   connect(STAHOST);
@@ -11,23 +12,23 @@ void wemos_WiFi::connect() {
 void wemos_WiFi::connect(const char* _nodeName) {
   Serial.print("connecting");
 
-  pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(inLed, OUTPUT);
   WiFi.mode(WIFI_STA);
   WiFi.begin(STASSID, STAPSK);
 
   // Wait for connection
   while (WiFi.status() != WL_CONNECTED) {
     delay(100);
-    digitalWrite(LED_BUILTIN, LOW);
+    digitalWrite(inLed, LOW);
     delay(100);
-    digitalWrite(LED_BUILTIN, HIGH);
+    digitalWrite(inLed, HIGH);
     Serial.print(".");
   }
   Serial.print("\rconnected to ");
   Serial.print(STASSID);
   Serial.print(" @");
   Serial.println(WiFi.localIP());
-  digitalWrite(LED_BUILTIN, HIGH);  
+  digitalWrite(inLed, HIGH);  
 
   // mDNS service
   if (MDNS.begin(_nodeName)) 
