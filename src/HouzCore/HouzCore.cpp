@@ -1,7 +1,5 @@
 #include "HouzCore.h"
 #include "Arduino.h"
-#include <iostream>
-#include <iomanip>
 
 #include <QueueArray.h>
 QueueArray <DevicePkt> taskQueue;

@@ -58,16 +58,15 @@
 #define deviceType_pressure 3
 
 // Device data
-typedef struct Device {
+struct Device {
 public:
   int id;
 	int node;
 	unsigned long payload;
   int type; //deviceType defines
-  // explicit operator DevicePkt() const { return ; }
 };
 
-typedef struct DevicePkt : Device {
+struct DevicePkt : Device {
   int cmd;
   explicit operator Device(){
     Device d;
@@ -79,7 +78,7 @@ typedef struct DevicePkt : Device {
   }
 };
 
-typedef struct Enviroment : Device {
+struct Enviroment : Device {
 public:
   float temp;
   float humidity;

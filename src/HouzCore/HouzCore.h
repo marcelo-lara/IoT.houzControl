@@ -4,7 +4,6 @@
 #include "Model/devs.h"
 #include "Model/HouzLink.h"
 #include <EEPROM.h>
-//#include "devs.h"
 
 // commands
 #define CMD_QUERY			0xA
@@ -45,8 +44,6 @@ class HouzCore{
 
     //enviroment helper
     void enviromentPush(float temp);
-
-
 
   private:
     String json_getDevice(Device dev);

@@ -2,7 +2,6 @@
 
 #include "01_Office.h"
 #include "src/HouzCore/HouzCore.h"
-#include "src/HouzCore/HouzButton.h"
 #include "Arduino.h"
 
 //Infrared
@@ -15,8 +14,7 @@ IRsend irsend(irSendPin);
 HouzEnviroment envSensor;
 
 //PushButton
-#include "src/HouzCore/HouzButton.h"
-HouzButton button(office_switch, wallSwitch);
+Button button(office_switch, wallSwitch);
 
 
 OfficeNode::OfficeNode(HouzCore* _core){
@@ -110,7 +108,7 @@ void OfficeNode::handle_WallSwitch(DevicePkt dev){
 // Ceiling Light
 
 //set ceilingLight relay status
-bool OfficeNode::setCeilingLightStatus(int _state){
+void OfficeNode::setCeilingLightStatus(int _state){
   if(_state==-1) _state=!(getCeilingLightStatus());//toggle
   if(_state>1) _state=1;
   digitalWrite(relayOut, !_state);

@@ -6,7 +6,7 @@
 #define btn_down 0
 #define btn_up 1
 
-#include "HouzButton.h"
+#include "Button.h"
 #include "Arduino.h"
 
 HouzCore* core;
@@ -15,14 +15,14 @@ uint8_t switchButton;
 int _lastStatus;
 int _currStatus;
 
-HouzButton::HouzButton(u8 _deviceId, uint8_t _switchButton){
+Button::Button(u8 _deviceId, uint8_t _switchButton){
     device.id=_deviceId;
     switchButton=_switchButton;
     pinMode(switchButton, INPUT_PULLUP);
 	_lastStatus=digitalRead(switchButton);
 };
 
-void HouzButton::setup(HouzCore* _core){
+void Button::setup(HouzCore* _core){
   core=_core;
 };
 
@@ -32,7 +32,7 @@ unsigned long _sw_longPressTimeout;
 unsigned long _sw_minNextClick;
 int _sw_clickCount = 0;
 
-void HouzButton::update(){
+void Button::update(){
 	_currStatus=digitalRead(switchButton);
 	
 	//are we counting clicks?
@@ -92,7 +92,7 @@ void HouzButton::update(){
 
 }
 
-DevicePkt HouzButton::getPkt(unsigned long action){
+DevicePkt Button::getPkt(unsigned long action){
     DevicePkt dev;
     dev.id=device.id;
     dev.node = device.node;

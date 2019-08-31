@@ -15,6 +15,10 @@
         "xlocnum": "cpp",
         "xloctime": "cpp",
         "functional": "cpp",
-        "iostream": "cpp"
-    }
+        "iostream": "cpp",
+        "system_error": "cpp",
+        "xlocale": "cpp",
+        "typeinfo": "cpp"
+    },
+    "arduino.logLevel": "info"
 }

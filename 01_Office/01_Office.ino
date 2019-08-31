@@ -14,7 +14,6 @@ OfficeNode office(&houzCore);
 #include "Arduino.h"
 
 //WebServer
-#include <FS.h>
 #include <ESPAsyncWebServer.h>
 #include <ArduinoJson.h>
 AsyncWebServer server(80);
@@ -41,7 +40,7 @@ void loop(){
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // WebServer
 void webInit(){
-  //server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html");
+//  server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html");
   server.on("/api",HTTP_GET,onGetStatus);
   server.on("/api/task", HTTP_POST, nullAsyncWebServerRequest, nullFileRequest, onPostTask);
   server.onNotFound(onNotFound);

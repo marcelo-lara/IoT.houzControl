@@ -1,9 +1,9 @@
 #pragma once
 #include "../HouzCore.h"
 
-typedef class HouzButton{
+typedef class Button{
 public:
-  HouzButton(u8 _deviceId, uint8_t _switchButton);
+  Button(u8 _deviceId, uint8_t _switchButton);
   void setup(HouzCore* _core);
   void update();
 

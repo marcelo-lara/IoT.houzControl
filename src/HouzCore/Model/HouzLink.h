@@ -1,5 +1,5 @@
 #pragma once
-#include "../HouzCore.h"
+#include "devs.h"
 
 class HouzLink{
     public:
