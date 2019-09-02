@@ -7,7 +7,7 @@
 #include "src/HouzCore/HouzJson.h"
 #include "01_Office.h"
 HouzCore houzCore;
-OfficeNode office(&houzCore);
+OfficeNode office(houzCore);
 
 //WeMos
 #include "src/wemos_WiFi/wemos_WiFi.h"

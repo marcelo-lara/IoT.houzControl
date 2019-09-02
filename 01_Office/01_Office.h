@@ -1,10 +1,11 @@
 #pragma once
 // Wiring
 #define lightSensor A0 // A0 LightSensor
-#define wallSwitch  16 // D0 Wall Switch
 
-#define statusLed   14 // D5 Wall StatusLed
-#define relayOut    12 // D6 relay out
+#define wallSwitch  14 // D5 Wall Switch
+#define statusLed   12 // D6 Wall StatusLed
+
+#define relayOut    13 // D7 relay out
 
 #define irSendPin    0 // D3 infrared signal out
 
@@ -18,7 +19,7 @@
 
 typedef class OfficeNode {
 public:
-  OfficeNode(HouzCore* _core);
+  OfficeNode(HouzCore &_core);
   void handle_WallSwitch(DevicePkt dev);
   void setup();
   void update();

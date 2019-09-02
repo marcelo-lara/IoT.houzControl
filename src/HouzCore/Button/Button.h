@@ -1,10 +1,10 @@
 #pragma once
 #include "../HouzCore.h"
 
-typedef class Button{
+class Button{
 public:
   Button(u8 _deviceId, uint8_t _switchButton);
-  void setup(HouzCore* _core);
+  void setup(HouzCore &_core);
   void update();
 
 private:
@@ -14,5 +14,5 @@ private:
   unsigned long inSw_lastMs;
   unsigned long inSw_downMs;
   int inSwitchCount;
-
+  HouzCore *core;
 };

@@ -17,14 +17,13 @@ HouzEnviroment envSensor;
 Button button(office_switch, wallSwitch);
 
 
-OfficeNode::OfficeNode(HouzCore* _core){
+OfficeNode::OfficeNode(HouzCore &_core){
   pinMode(statusLed,  OUTPUT);
   pinMode(relayOut,   OUTPUT);
   setCeilingLightStatus(1);
   digitalWrite(statusLed, HIGH);
-
   button.setup(_core);
-  core = _core;
+  core = &_core;
 
   //set devices
   ceilingLight.id = office_light;
@@ -33,7 +32,6 @@ OfficeNode::OfficeNode(HouzCore* _core){
 }
 
 void OfficeNode::setup(){
-
   envSensor.init();
   irsend.begin();
   analogWrite(statusLed, 200);

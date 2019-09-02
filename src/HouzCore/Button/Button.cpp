@@ -7,7 +7,6 @@
 #define btn_up 1
 
 #include "Button.h"
-#include "Arduino.h"
 
 HouzCore* core;
 Device device;
@@ -22,8 +21,8 @@ Button::Button(u8 _deviceId, uint8_t _switchButton){
 	_lastStatus=digitalRead(switchButton);
 };
 
-void Button::setup(HouzCore* _core){
-  core=_core;
+void Button::setup(HouzCore &_core){
+  core=&_core;
 };
 
 unsigned long _sw_timerStart;
