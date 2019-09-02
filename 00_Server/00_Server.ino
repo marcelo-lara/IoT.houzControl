@@ -13,6 +13,14 @@
 #define elapsedDays(_time_) ( _time_ / SECS_PER_DAY)  
 
 
+/*
+TODO
+| endpoint | method | description      |
+|----------|--------|------------------|
+| api      | GET    | send device list |
+| api/task | POST   | add task         |
+*/
+
 
 
 //WebServer
