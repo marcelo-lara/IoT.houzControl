@@ -41,6 +41,7 @@ Enviroment HouzEnviroment::get(){
 };
 
 void  HouzEnviroment::bmeRead(){
+//TODO:store values, read only when necessary
   //read values
    float temp(NAN), hum(NAN), pres(NAN);
    BME280::TempUnit tempUnit(BME280::TempUnit_Celsius);
