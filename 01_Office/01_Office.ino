@@ -19,6 +19,15 @@ OfficeNode office(houzCore);
 AsyncWebServer server(80);
 AsyncWebSocket ws("/");
 
+/*
+TODO
+| endpoint | method | description      |
+|----------|--------|------------------|
+| api      | GET    | send device list |
+| api/task | POST   | add task         |
+*/
+
+
 void setup(){
   Serial.begin(115200);
   Serial.println("\n\n:: Houz office node");
